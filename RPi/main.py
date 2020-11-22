@@ -1,12 +1,26 @@
 import logging
+import logging.config
 from io import BytesIO
 import numpy as np
 import time
 import socket
+import json
+from datetime import datetime
 
 from utils import piCamHandler, communicationThread
 
-logger = logging.getLogger(__name__)
+applogger = logging.getLogger('picamera')
+applogger.setLevel(logging.INFO)
+shandler = logging.StreamHandler()
+shandler.setLevel(logging.INFO)
+applogger.addHandler(shandler)
+now = datetime.now().strftime('%y%m%d%H%M%S')
+filename = './log/' + now + '.log'
+fhandler = logging.FileHandler(filename, delay=True)
+fformat = logging.Formatter('%(asctime)s::%(levelname)s::%(name)s - %(message)s')
+fhandler.setFormatter(fformat)
+fhandler.setLevel(logging.DEBUG)
+applogger.addHandler(fhandler)
 
 if __name__=='__main__':
     ComThread = communicationThread(host='192.168.0.47', port=49152)
