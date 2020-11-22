@@ -3,7 +3,7 @@ import logging
 import socket
 import struct
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('picamera.com')
 
 class communicationThread(threading.Thread):
     def __init__(self, host: str, port: int=49152):
