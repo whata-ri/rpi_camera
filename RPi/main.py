@@ -31,18 +31,22 @@ if __name__=='__main__':
     PiCamera._open_camera()
     PiCamera._open_stream()
 
-    out = BytesIO()
     try:
         while True:
             try:
                 PiCamera.shoot()
+                out = BytesIO()
                 np.save(out, PiCamera.buffer)
                 binary = out.getvalue()
                 ComThread.send(binary)
+                out.close()
                 time.sleep(0.1)
             except socket.error:
                 ComThread._close_conn()
+                PiCamera._close_camera()
                 ComThread._connect_socket()
+                PiCamera._open_camera()
+                PiCamera._open_stream()
             except KeyboardInterrupt:
                 break
     finally:
