@@ -4,27 +4,22 @@ import numpy as np
 import socket
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-import struct
 from datetime import datetime
 
-logger = logging.getLogger(__name__)
+from utils import recv_msg, recvall
 
-def recv_msg(sock):
-    raw_msglen = recvall(sock, 4)
-    if not raw_msglen:
-        return None
-    msglen = struct.unpack('>I', raw_msglen)[0]
-
-    return recvall(sock, msglen)
-
-def recvall(sock, n):
-    data = bytearray()
-    while len(data) < n:
-        packet = sock.recv(n - len(data))
-        if not packet:
-            return None
-        data.extend(packet)
-    return data
+applogger = logging.getLogger('picamera')
+applogger.setLevel(logging.INFO)
+shandler = logging.StreamHandler()
+shandler.setLevel(logging.INFO)
+applogger.addHandler(shandler)
+now = datetime.now().strftime('%y%m%d%H%M%S')
+filename = './log/' + now + '.log'
+fhandler = logging.FileHandler(filename, delay=True)
+fformat = logging.Formatter('%(asctime)s::%(levelname)s::%(name)s - %(message)s')
+fhandler.setFormatter(fformat)
+fhandler.setLevel(logging.DEBUG)
+applogger.addHandler(fhandler)
 
 if __name__=='__main__':
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
