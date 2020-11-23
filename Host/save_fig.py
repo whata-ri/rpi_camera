@@ -38,5 +38,5 @@ if __name__=='__main__':
 
             data = np.load(BytesIO(data), allow_pickle=True)
             plt.imshow(data)
-            dt = datetime.now().strftime('%Y%m%d_%H%H%S')
+            dt = datetime.now().strftime(f'%Y%m%d_%H%H%S_{i}')
             plt.savefig(f'output/'+ dt +'.png')
