@@ -32,7 +32,7 @@ if __name__=='__main__':
         try:
             plt.ion()
 
-            for i in range(10):
+            for i in range(100):
                 data = recv_msg(s)
 
                 data = np.load(BytesIO(data), allow_pickle=True)
